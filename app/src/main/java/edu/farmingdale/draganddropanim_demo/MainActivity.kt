@@ -40,7 +40,6 @@ class MainActivity : ComponentActivity() {
 // ToDo 9: Enable certain animation based on the drop event (like up or down)
 // ToDo 10: Make sure to commit for each one of the above and submit this individually
 
-
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(text = "Hello $name!", modifier = modifier)
