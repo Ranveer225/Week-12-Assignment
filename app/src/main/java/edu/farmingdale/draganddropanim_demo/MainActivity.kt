@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
 // ToDo 10: Make sure to commit for each one of the above and submit this individually
 
 
-
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(text = "Hello $name!", modifier = modifier)
