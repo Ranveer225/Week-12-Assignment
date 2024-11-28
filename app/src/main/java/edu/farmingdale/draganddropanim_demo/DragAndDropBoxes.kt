@@ -35,23 +35,33 @@ import androidx.compose.ui.draganddrop.DragAndDropTarget
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.draganddrop.mimeTypes
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-
 @Composable
 fun DragAndDropBoxes(modifier: Modifier = Modifier) {
+
+    var rotationAngle by remember { mutableStateOf(0f) }
+    var offsetX by remember { mutableStateOf(0f) }
+    var offsetY by remember { mutableStateOf(0f) }
+    var isDropped by remember { mutableStateOf(false) }
+
     Column(modifier = Modifier.fillMaxSize()) {
 
         Row(
             modifier = modifier
-                .fillMaxWidth().weight(0.2f)
+                .fillMaxWidth()
+                .weight(0.2f)
         ) {
             val boxCount = 4
             var dragBoxIndex by remember {
@@ -74,8 +84,8 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                             target = remember {
                                 object : DragAndDropTarget {
                                     override fun onDrop(event: DragAndDropEvent): Boolean {
-
                                         dragBoxIndex = index
+                                        isDropped = !isDropped
                                         return true
                                     }
                                 }
@@ -89,8 +99,8 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                         exit = scaleOut() + fadeOut()
                     ) {
                         Icon(
-                        imageVector = Icons.Default.ArrowForward,
-                            contentDescription ="",
+                            imageVector = Icons.Default.ArrowForward,
+                            contentDescription = "",
                             modifier = Modifier
                                 .fillMaxSize()
                                 .dragAndDropSource {
@@ -113,20 +123,67 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
             }
         }
 
-
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.8f)
                 .background(Color.Red)
-
         ) {
-                drawRect(Color.Green, radius = 50f, center = Offset(100f, 100f))
-       }
-    }
-}
+            rotate(rotationAngle) {
+                drawRect(
+                    color = Color.Green,
+                    topLeft = Offset(size.width / 2 - 50 + offsetX, size.height / 2 - 50 + offsetY),
+                    size = androidx.compose.ui.geometry.Size(100f, 100f)
+                )
+            }
+        }
 
-fun drawRect(Green: Color, radius: Float, center: Offset) {
-    TODO("2")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            // Rotate Button
+            Button(onClick = { rotationAngle += 45f }) {
+                Text("Rotate")
+            }
+
+            // Translate Buttons
+            Button(onClick = { offsetX += 20f }) {
+                Text("Move Right")
+            }
+            Button(onClick = { offsetX -= 20f }) {
+                Text("Move Left")
+            }
+            Button(onClick = { offsetY += 20f }) {
+                Text("Move Down")
+            }
+            Button(onClick = { offsetY -= 20f }) {
+                Text("Move Up")
+            }
+
+            Button(onClick = {
+                rotationAngle = 0f
+                offsetX = 0f
+                offsetY = 0f
+            }) {
+                Text("Reset")
+            }
+        }
+
+        AnimatedVisibility(
+            visible = isDropped,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            Text(
+                text = "Dropped!",
+                color = Color.White,
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(16.dp)
+            )
+        }
+    }
 }
 
