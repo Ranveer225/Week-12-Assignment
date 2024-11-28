@@ -142,12 +142,11 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            // Rotate Button
+
             Button(onClick = { rotationAngle += 45f }) {
                 Text("Rotate")
             }
 
-            // Translate Buttons
             Button(onClick = { offsetX += 20f }) {
                 Text("Move Right")
             }
