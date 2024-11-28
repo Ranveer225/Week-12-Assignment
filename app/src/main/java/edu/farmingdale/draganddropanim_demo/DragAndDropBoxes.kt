@@ -50,7 +50,6 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun DragAndDropBoxes(modifier: Modifier = Modifier) {
-
     var rotationAngle by remember { mutableStateOf(0f) }
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
